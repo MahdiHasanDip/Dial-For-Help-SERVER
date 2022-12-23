@@ -6,7 +6,7 @@ require('dotenv').config()
 const ObjectId = require('mongodb').ObjectId;
 
 // port 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 9000;
 
 // middleware 
 app.use(cors());
@@ -27,11 +27,14 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run(){
     try{
         await client.connect();
-        console.log('db connected successfully');
+        console.log('db connected successfully');                
         const database = client.db('dial_for_help')
         const ServiceCollection = database.collection('Service')
         const userCollection = database.collection('users')
 
+
+
+       
 
     // post service - 
         app.post('/service', async(req,res)=>{
@@ -93,6 +96,9 @@ async function run(){
            const user= await cursor.toArray();
            res.send(user);           
         });
+
+
+        
    
 
 
@@ -107,7 +113,7 @@ async function run(){
     }
 
     finally{
-        // await client.close();
+        await client.close();
     };
 };
 
@@ -116,10 +122,18 @@ run().catch(console.dir);
 
 
 
+
+
 app.get('/',(req, res)=>{
     res.send("Server is running!!!")
 });
 
+
+ // ....................... 
+
+ app.get('/abs', (req, res )=>{
+    res.send("done")
+ })
 
 app.listen(process.env.PORT || port, (req, res) => {
     console.log("listen to port",port);
